@@ -14,7 +14,7 @@ export const siteContent = {
     roleLine: 'Software Engineer · AI/ML Researcher · Cloud Architect · Kerala, India',
     enterButton: 'ENTER_SYSTEM →',
     resumeButton: 'READ_RESUME.PDF →',
-    resumeFile: '/resume.pdf',
+    resumeFile: '/SWE_Resume_main.pdf',
     graphCaption: '// live graph · 12 nodes · 18 edges',
     ticker:
       "BEST PAPER RAET'26 ··· 98.52% ML ACCURACY ··· 30,000+ PROFILES ··· KERALA VISION BROADBAND ··· STEP4ECO.UK ··· YIP GOVERNMENT OF KERALA ···",
@@ -147,8 +147,8 @@ export const siteContent = {
         ],
         badges: ["Best Paper Award · RAET'26 National Conference"],
         links: {
-          github: 'https://github.com/niranjcn',
-          live: 'https://linkedin.com/in/niranjcn',
+          github: 'https://github.com/niranjcn/tracient',
+          live: '',
         },
         featured: true,
         illustration: 'merkle',
@@ -182,8 +182,8 @@ export const siteContent = {
         ],
         badges: ["Presented at RAET'25"],
         links: {
-          github: 'https://github.com/niranjcn',
-          live: 'https://linkedin.com/in/niranjcn',
+          github: 'https://github.com/niranjcn/re-tram',
+          live: '',
         },
         featured: false,
         illustration: 'camera',
@@ -218,8 +218,8 @@ export const siteContent = {
         ],
         badges: ['Kannur Vision Broadband — Production'],
         links: {
-          github: 'https://github.com/niranjcn',
-          live: 'https://linkedin.com/in/niranjcn',
+          github: 'https://github.com/niranjcn/Distribution-Management-System',
+          live: '',
         },
         featured: false,
         illustration: 'network',
@@ -253,7 +253,7 @@ export const siteContent = {
         ],
         badges: ['UK Government ECO4 Scheme'],
         links: {
-          github: 'https://github.com/niranjcn',
+          github: 'https://github.com/niranjcn/step4eco-v2',
           live: 'https://step4eco.uk',
         },
         featured: false,
@@ -288,8 +288,8 @@ export const siteContent = {
         ],
         badges: ['St. Thomas College — Internal Tool'],
         links: {
-          github: 'https://github.com/niranjcn',
-          live: 'https://linkedin.com/in/niranjcn',
+          github: 'https://github.com/niranjcn/exam-hall-seat-management',
+          live: '',
         },
         featured: false,
         illustration: 'grid',
@@ -323,8 +323,8 @@ export const siteContent = {
         ],
         badges: ['KCCL — Regulatory Compliance'],
         links: {
-          github: 'https://github.com/niranjcn',
-          live: 'https://linkedin.com/in/niranjcn',
+          github: 'kccl.tv',
+          live: 'kccl.tv',
         },
         featured: false,
         illustration: 'documents',
