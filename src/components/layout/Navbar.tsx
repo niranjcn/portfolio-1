@@ -10,7 +10,8 @@ const NAV_ITEMS = [
   { id: 'experience', label: 'Experience' },
   { id: 'projects', label: 'Projects' },
   { id: 'skills', label: 'Skills' },
-  { id: 'certifications', label: 'Certifications' },
+  { id: 'certifications', label: 'Certs' },
+  { id: 'achievements', label: 'Achievements' },
   { id: 'contact', label: 'Contact' },
 ]
 
@@ -37,8 +38,7 @@ export function Navbar() {
 
   const handleNavClick = (id: string) => {
     setMobileOpen(false)
-    const el = document.getElementById(id)
-    if (el) el.scrollIntoView({ behavior: 'smooth' })
+    document.getElementById(id)?.scrollIntoView({ behavior: 'smooth' })
   }
 
   const scrollToTop = () => {
@@ -50,32 +50,28 @@ export function Navbar() {
       <header
         className={cn(
           'fixed top-0 left-0 right-0 z-[9997] transition-all duration-300',
-          scrolled
-            ? 'bg-bg/80 backdrop-blur-md border-b border-border'
-            : 'bg-transparent'
+          scrolled ? 'glass border-b border-border shadow-card' : 'bg-transparent'
         )}
       >
         <nav className="mx-auto flex max-w-[var(--container-max)] items-center justify-between px-[var(--container-pad)] py-3" aria-label="Main navigation">
-          {/* Logo */}
           <button
             onClick={scrollToTop}
-            className="flex h-10 w-10 items-center justify-center rounded-md border-2 border-accent font-display text-lg font-bold text-accent transition-transform hover:scale-105"
+            className="group flex h-9 w-9 items-center justify-center rounded-md border-2 border-accent font-display text-base font-bold text-accent transition-all duration-[var(--transition-smooth)] hover:shadow-glow hover:scale-105"
             aria-label="Scroll to top"
           >
-            NC
+            <span className="group-hover:scale-110 transition-transform">NC</span>
           </button>
 
-          {/* Desktop nav */}
           <ul className="hidden md:flex items-center gap-1">
             {NAV_ITEMS.map((item) => (
               <li key={item.id}>
                 <button
                   onClick={() => handleNavClick(item.id)}
                   className={cn(
-                    'px-3 py-2 rounded-md text-sm font-body transition-colors duration-base',
+                    'px-3 py-2 rounded-md text-sm font-body transition-all duration-[var(--transition-smooth)]',
                     activeId === item.id
-                      ? 'text-accent font-medium'
-                      : 'text-text-muted hover:text-text'
+                      ? 'text-accent font-medium bg-accent-dim'
+                      : 'text-text-muted hover:text-text hover:bg-surface/50'
                   )}
                 >
                   {item.label}
@@ -84,19 +80,17 @@ export function Navbar() {
             ))}
           </ul>
 
-          {/* Desktop CTA */}
           <div className="hidden md:flex items-center gap-3">
             <a
               href={portfolio.personal.resumeUrl}
               download
-              className="inline-flex items-center gap-2 rounded-md bg-accent px-4 py-2 text-sm font-medium text-bg transition-all hover:bg-accent/90"
+              className="group relative inline-flex items-center gap-2 overflow-hidden rounded-md bg-accent px-4 py-2 text-sm font-medium text-bg transition-all hover:shadow-glow"
             >
-              <FileText size={16} />
-              Resume
+              <span className="relative z-10 flex items-center gap-2"><FileText size={16} />Resume</span>
+              <span className="absolute inset-0 bg-white/10 translate-y-full group-hover:translate-y-0 transition-transform duration-[var(--transition-smooth)]" />
             </a>
           </div>
 
-          {/* Mobile hamburger */}
           <button
             onClick={() => setMobileOpen(!mobileOpen)}
             className="md:hidden rounded-md p-2 text-text-muted hover:text-text hover:bg-surface transition-colors"
@@ -108,7 +102,6 @@ export function Navbar() {
         </nav>
       </header>
 
-      {/* Mobile menu */}
       <AnimatePresence>
         {mobileOpen && (
           <motion.div
@@ -116,7 +109,7 @@ export function Navbar() {
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -20 }}
             transition={{ duration: 0.2 }}
-            className="fixed inset-0 top-[57px] z-[9996] bg-bg/95 backdrop-blur-md md:hidden"
+            className="fixed inset-0 top-[57px] z-[9996] glass md:hidden"
           >
             <nav className="flex flex-col items-center justify-center h-full gap-6">
               {NAV_ITEMS.map((item, i) => (
@@ -126,10 +119,7 @@ export function Navbar() {
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: i * 0.05 }}
                   onClick={() => handleNavClick(item.id)}
-                  className={cn(
-                    'text-xl font-display transition-colors',
-                    activeId === item.id ? 'text-accent' : 'text-text-muted hover:text-text'
-                  )}
+                  className={cn('text-xl font-display transition-colors', activeId === item.id ? 'text-accent' : 'text-text-muted hover:text-text')}
                 >
                   {item.label}
                 </motion.button>
@@ -142,15 +132,13 @@ export function Navbar() {
                 download
                 className="mt-4 inline-flex items-center gap-2 rounded-md bg-accent px-6 py-3 text-sm font-medium text-bg"
               >
-                <FileText size={16} />
-                Download Resume
+                <FileText size={16} /> Download Resume
               </motion.a>
             </nav>
           </motion.div>
         )}
       </AnimatePresence>
 
-      {/* Back to top button */}
       <BackToTop />
     </>
   )
@@ -172,11 +160,12 @@ function BackToTop() {
           initial={{ opacity: 0, scale: 0.8 }}
           animate={{ opacity: 1, scale: 1 }}
           exit={{ opacity: 0, scale: 0.8 }}
+          whileHover={{ scale: 1.1 }}
           onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
-          className="fixed bottom-6 right-6 z-[9995] flex h-12 w-12 items-center justify-center rounded-full bg-accent text-bg shadow-lg hover:bg-accent/90 transition-colors"
+          className="fixed bottom-6 right-6 z-[9995] flex h-11 w-11 items-center justify-center rounded-full bg-accent text-bg shadow-lg shadow-accent/30 hover:bg-accent/90 transition-all duration-[var(--transition-smooth)]"
           aria-label="Back to top"
         >
-          <ChevronUp size={24} />
+          <ChevronUp size={22} />
         </motion.button>
       )}
     </AnimatePresence>

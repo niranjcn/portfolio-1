@@ -44,6 +44,9 @@ export interface Project {
   number: string
   title: string
   tagline: string
+  problem: string
+  solution: string
+  challenges?: string[]
   description: string
   longDescription: string[]
   stack: string[]
@@ -55,6 +58,7 @@ export interface Project {
   status: string
   year: string
   illustration?: string
+  images?: string[]
 }
 
 export interface Experience {
@@ -80,17 +84,19 @@ export interface ClientProject {
   illustration?: string
 }
 
-export interface Certification {
+export interface Certificate {
   id: string
   title: string
   issuer: string
-  year: string
-  description: string
-  tags: string[]
-  highlight?: boolean
-  icon: string
+  date: string
+  credentialId?: string
   credentialUrl?: string
+  image: string
+  category: CertificateCategory
+  tags: string[]
 }
+
+export type CertificateCategory = 'AI & Machine Learning' | 'Cloud & DevOps' | 'Web Development' | 'Data Science' | 'Programming' | 'Design'
 
 export interface Achievement {
   id: string
@@ -101,6 +107,7 @@ export interface Achievement {
   description: string
   tags: string[]
   highlight?: boolean
+  image?: string
 }
 
 export interface TerminalCommand {
@@ -116,6 +123,7 @@ export interface Portfolio {
   projects: Project[]
   experience: Experience[]
   achievements: Achievement[]
+  certificates: Certificate[]
   contact: ContactSection
 }
 
