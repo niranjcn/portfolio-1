@@ -45,7 +45,7 @@ function App() {
           </SectionWrapper>
         </Suspense>
         <Suspense fallback={sectionLoader()}>
-          <SectionWrapper id="skills">
+          <SectionWrapper id="skills" full>
             <Skills />
           </SectionWrapper>
         </Suspense>

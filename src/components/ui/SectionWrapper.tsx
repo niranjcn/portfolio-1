@@ -7,6 +7,7 @@ interface SectionWrapperProps {
   className?: string
   children: React.ReactNode
   stagger?: boolean
+  full?: boolean
 }
 
 const easeOut = [0.22, 1, 0.36, 1] as const
@@ -20,7 +21,7 @@ const defaultVariants = {
   },
 }
 
-export function SectionWrapper({ id, className, children, stagger = false }: SectionWrapperProps) {
+export function SectionWrapper({ id, className, children, stagger = false, full = false }: SectionWrapperProps) {
   const [ref, inView] = useInView(0.05, true)
 
   return (
@@ -28,7 +29,7 @@ export function SectionWrapper({ id, className, children, stagger = false }: Sec
       id={id}
       ref={ref}
       aria-labelledby={`${id}-heading`}
-      className={cn('py-20 md:py-28', className)}
+      className={cn(full ? '' : 'py-20 md:py-28', className)}
     >
       <motion.div
         initial="hidden"
@@ -43,7 +44,7 @@ export function SectionWrapper({ id, className, children, stagger = false }: Sec
               },
             }
           : defaultVariants}
-        className="mx-auto w-full max-w-[var(--container-max)] px-[var(--container-pad)]"
+        className={cn(full ? 'w-full' : 'mx-auto w-full max-w-[var(--container-max)] px-[var(--container-pad)]')}
       >
         {children}
       </motion.div>
