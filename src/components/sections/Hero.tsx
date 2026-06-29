@@ -8,7 +8,7 @@ import portfolio from '../../data/portfolioData'
 
 const easeOut = [0.22, 1, 0.36, 1] as const
 
-function MagneticButton({ children, className, ...props }: { children: React.ReactNode; className?: string; [key: string]: unknown }) {
+function MagneticButton({ children, className, ...props }: { children: React.ReactNode; className?: string;[key: string]: unknown }) {
   const ref = useRef<HTMLButtonElement>(null)
   const style = useMagnetic(ref, 0.25)
   return (
@@ -18,7 +18,7 @@ function MagneticButton({ children, className, ...props }: { children: React.Rea
   )
 }
 
-function MagneticLink({ children, className, ...props }: { children: React.ReactNode; className?: string; [key: string]: unknown }) {
+function MagneticLink({ children, className, ...props }: { children: React.ReactNode; className?: string;[key: string]: unknown }) {
   const ref = useRef<HTMLAnchorElement>(null)
   const style = useMagnetic(ref, 0.2)
   return (
@@ -205,11 +205,11 @@ export default function Hero() {
                   className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-110"
                   onError={(e) => {
                     (e.target as HTMLImageElement).style.display = 'none'
-                    ;(e.target as HTMLImageElement).parentElement!.classList.add('flex', 'items-center', 'justify-center')
+                      ; (e.target as HTMLImageElement).parentElement!.classList.add('flex', 'items-center', 'justify-center')
                     const fallback = document.createElement('span')
                     fallback.className = 'text-4xl text-text-muted font-display'
                     fallback.textContent = portfolio.personal.name.split(' ').map(n => n[0]).join('')
-                    ;(e.target as HTMLImageElement).parentElement!.appendChild(fallback)
+                      ; (e.target as HTMLImageElement).parentElement!.appendChild(fallback)
                   }}
                 />
               </div>

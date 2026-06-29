@@ -70,7 +70,7 @@ export default function Contact({ setToast }: { setToast: (toast: { message: str
           <div>
             <h3 className="font-display text-2xl font-bold text-text">Let&apos;s Build Something Together</h3>
             <p className="mt-2 text-text-muted leading-relaxed">
-              I&apos;m currently open to freelance projects, full-time opportunities, and collaborations. 
+              I&apos;m currently open to freelance projects, full-time opportunities, and collaborations.
               Whether you have a project in mind or just want to say hello, I&apos;d love to hear from you.
             </p>
           </div>
