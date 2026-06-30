@@ -14,7 +14,7 @@ export const siteContent = {
     roleLine: 'Software Engineer · AI/ML Researcher · Cloud Architect · Kerala, India',
     enterButton: 'ENTER_SYSTEM →',
     resumeButton: 'READ_RESUME.PDF →',
-    resumeFile: '/SWE_Resume_main.pdf',
+    resumeFile: '/swe_resume_ats.pdf',
     graphCaption: '// live graph · 12 nodes · 18 edges',
     ticker:
       "BEST PAPER RAET'26 ··· 98.52% ML ACCURACY ··· 30,000+ PROFILES ··· KERALA VISION BROADBAND ··· STEP4ECO.UK ··· YIP GOVERNMENT OF KERALA ···",
