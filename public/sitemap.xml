@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  <url><loc>https://www.niranj.me/</loc><changefreq>weekly</changefreq><priority>1.0</priority></url>
+  <url><loc>https://www.niranj.me/projects</loc><changefreq>weekly</changefreq><priority>0.9</priority></url>
+  <url><loc>https://www.niranj.me/projects/01</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://www.niranj.me/projects/02</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://www.niranj.me/projects/03</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://www.niranj.me/projects/04</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://www.niranj.me/projects/05</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://www.niranj.me/projects/06</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://www.niranj.me/projects/07</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://www.niranj.me/projects/08</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://www.niranj.me/projects/09</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://www.niranj.me/about</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://www.niranj.me/contact</loc><changefreq>yearly</changefreq><priority>0.5</priority></url>
+  <url><loc>https://www.niranj.me/certifications</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+</urlset>
