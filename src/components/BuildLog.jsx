@@ -20,23 +20,22 @@ function BuildLog({ open, onClose }) {
   if (!open) return null
 
   return (
-    <div className="fixed inset-0 z-[9998] bg-ink text-cream">
-      <div className="flex h-full flex-col items-center justify-center gap-3 font-mono text-sm">
-        <div className="mb-2 text-xs uppercase tracking-[0.4em] text-cream/70">
-          {siteContent.buildLog.title}
-        </div>
-        {visible.map((line) => (
-          <div key={line}>{line}</div>
-        ))}
-        <button
-          type="button"
-          data-magnetic
-          onClick={onClose}
-          className="mt-6 border border-cream/30 px-4 py-2 text-xs uppercase tracking-[0.3em]"
-        >
-          {siteContent.buildLog.closeLabel}
-        </button>
+    <div className="fixed inset-0 z-[9998] bg-black flex flex-col items-center justify-center gap-3"
+      style={{ fontFamily: "'SF Mono', 'Fira Code', 'JetBrains Mono', monospace" }}
+    >
+      <div className="mb-2 text-[10px] uppercase tracking-[0.4em] text-stone-500">
+        {siteContent.buildLog.title}
       </div>
+      {visible.map((line) => (
+        <div key={line} className="text-stone-300 text-sm">{line}</div>
+      ))}
+      <button
+        type="button"
+        onClick={onClose}
+        className="mt-6 border border-stone-700 px-4 py-2 text-[10px] uppercase tracking-[0.3em] text-stone-500 bg-transparent cursor-pointer font-inter transition-colors hover:text-stone-100 hover:border-stone-500"
+      >
+        {siteContent.buildLog.closeLabel}
+      </button>
     </div>
   )
 }

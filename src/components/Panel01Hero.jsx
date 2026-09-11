@@ -1,266 +1,136 @@
-import { useEffect, useRef, useState } from 'react'
-import { motion } from 'framer-motion'
+import { useInView } from '../hooks/useInView.js'
 import { siteContent } from '../data/content.js'
-import Ticker from './Ticker.jsx'
 
-const CHARS = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789@#$%'
-
-function scramble(target, onUpdate, onDone) {
-  const letters = target.split('')
-  let iterations = 0
-  const interval = setInterval(() => {
-    const result = letters.map((letter, index) => {
-      if (letter === ' ' || letter === '\n') return letter
-      if (index < iterations) return target[index]
-      return CHARS[Math.floor(Math.random() * CHARS.length)]
-    })
-    onUpdate(result.join(''))
-    iterations += 0.4
-    if (iterations >= letters.length) {
-      clearInterval(interval)
-      onUpdate(target)
-      onDone?.()
-    }
-  }, 40)
-  return () => clearInterval(interval)
-}
-
-function Panel01Hero({ onEnterSystem }) {
-  const [displayName, setDisplayName] = useState('NIRANJ\nC N')
-  const [typed, setTyped] = useState('')
-  const [nameRevealed, setNameRevealed] = useState(false)
-  const canvasRef = useRef(null)
-  const containerRef = useRef(null)
-  const hoverRef = useRef(null)
-
-  const line = siteContent.hero.roleLine
-
-  useEffect(() => {
-    const timeout = setTimeout(() => {
-      scramble('NIRANJ\nC N', setDisplayName, () => setNameRevealed(true))
-    }, 400)
-    return () => clearTimeout(timeout)
-  }, [])
-
-  useEffect(() => {
-    let index = 0
-    const start = setTimeout(() => {
-      const interval = setInterval(() => {
-        index += 1
-        setTyped(line.slice(0, index))
-        if (index >= line.length) clearInterval(interval)
-      }, 35)
-    }, 2200)
-    return () => clearTimeout(start)
-  }, [line])
-
-  useEffect(() => {
-    const canvas = canvasRef.current
-    const container = containerRef.current
-    if (!canvas || !container) return
-
-    const ctx = canvas.getContext('2d')
-    const { nodes, edges } = siteContent.hero.graph
-    const points = nodes.map((n) => ({ id: n.id, x: n.x, y: n.y, vx: 0, vy: 0 }))
-    const links = edges.map(([s, t, w]) => ({ source: s, target: t, weight: w }))
-
-    const resize = () => {
-      const { width, height } = container.getBoundingClientRect()
-      canvas.width = width * window.devicePixelRatio
-      canvas.height = height * window.devicePixelRatio
-      canvas.style.width = `${width}px`
-      canvas.style.height = `${height}px`
-      ctx.setTransform(window.devicePixelRatio, 0, 0, window.devicePixelRatio, 0, 0)
-    }
-    resize()
-    window.addEventListener('resize', resize)
-
-    points.forEach((p) => {
-      p.x = p.x * canvas.clientWidth
-      p.y = p.y * canvas.clientHeight
-    })
-
-    const onMove = (e) => {
-      const rect = canvas.getBoundingClientRect()
-      const mx = e.clientX - rect.left
-      const my = e.clientY - rect.top
-      hoverRef.current = null
-      points.forEach((p) => {
-        if (Math.hypot(p.x - mx, p.y - my) < 14) hoverRef.current = p.id
-      })
-    }
-    canvas.addEventListener('mousemove', onMove)
-
-    let raf
-    const animate = () => {
-      ctx.clearRect(0, 0, canvas.clientWidth, canvas.clientHeight)
-      for (let i = 0; i < points.length; i++) {
-        for (let j = i + 1; j < points.length; j++) {
-          const a = points[i], b = points[j]
-          const dx = b.x - a.x, dy = b.y - a.y
-          const dist = Math.max(1, Math.hypot(dx, dy))
-          const repel = 120 / (dist * dist)
-          const fx = (dx / dist) * repel, fy = (dy / dist) * repel
-          a.vx -= fx; a.vy -= fy; b.vx += fx; b.vy += fy
-        }
-      }
-      links.forEach(({ source, target, weight }) => {
-        const a = points.find((p) => p.id === source)
-        const b = points.find((p) => p.id === target)
-        if (!a || !b) return
-        const dx = b.x - a.x, dy = b.y - a.y
-        const dist = Math.max(1, Math.hypot(dx, dy))
-        const ideal = 120 / weight
-        const force = (dist - ideal) * 0.002
-        const fx = (dx / dist) * force, fy = (dy / dist) * force
-        a.vx += fx; a.vy += fy; b.vx -= fx; b.vy -= fy
-      })
-      points.forEach((p) => {
-        p.vx *= 0.92; p.vy *= 0.92
-        p.x = Math.min(Math.max(30, p.x + p.vx), canvas.clientWidth - 30)
-        p.y = Math.min(Math.max(30, p.y + p.vy), canvas.clientHeight - 30)
-      })
-      links.forEach(({ source, target }) => {
-        const a = points.find((p) => p.id === source)
-        const b = points.find((p) => p.id === target)
-        if (!a || !b) return
-        const hl = hoverRef.current && (hoverRef.current === a.id || hoverRef.current === b.id)
-        ctx.strokeStyle = hl ? 'rgba(255,107,0,0.9)' : 'rgba(13,13,13,0.18)'
-        ctx.lineWidth = hl ? 2 : 1
-        ctx.beginPath(); ctx.moveTo(a.x, a.y); ctx.lineTo(b.x, b.y); ctx.stroke()
-      })
-      points.forEach((p) => {
-        const hl = hoverRef.current === p.id
-        if (hl) {
-          ctx.beginPath(); ctx.arc(p.x, p.y, 18, 0, Math.PI * 2)
-          ctx.fillStyle = 'rgba(255,107,0,0.08)'; ctx.fill()
-        }
-        ctx.fillStyle = hl ? '#FF6B00' : 'rgba(13,13,13,0.75)'
-        ctx.beginPath(); ctx.arc(p.x, p.y, hl ? 7 : 4, 0, Math.PI * 2); ctx.fill()
-        ctx.font = `${hl ? 'bold ' : ''}11px JetBrains Mono`
-        ctx.fillStyle = hl ? '#FF6B00' : 'rgba(13,13,13,0.55)'
-        ctx.fillText(p.id, p.x + 10, p.y - 8)
-      })
-      raf = requestAnimationFrame(animate)
-    }
-    animate()
-
-    return () => {
-      window.removeEventListener('resize', resize)
-      canvas.removeEventListener('mousemove', onMove)
-      cancelAnimationFrame(raf)
-    }
-  }, [])
-
-  const nameLines = displayName.split('\n')
-  const nameFontSize = 'clamp(52px, 10vw, 120px)'
+function Panel01Hero() {
+  const badgeRef = useInView()
+  const titleRef = useInView()
+  const taglineRef = useInView()
+  const actionsRef = useInView()
+  const statsRef = useInView()
 
   return (
-    <section className="breathing-cream relative flex min-h-screen md:h-screen w-screen overflow-x-hidden md:overflow-hidden">
-      <div className="flex flex-col md:flex-row h-full w-full">
+    <section id="landing" className="min-h-screen bg-white relative overflow-hidden">
+      <div className="absolute inset-0 dot-grid opacity-[0.07] pointer-events-none" />
 
-        {/* LEFT SIDE */}
-        <div className="flex w-full md:w-[58%] flex-col justify-center px-5 sm:px-8 md:pl-16 md:pr-6 pt-16 sm:pt-20 md:pt-0 pb-6 md:pb-0">
-
-          <motion.div
-            initial={{ opacity: 0, y: -10 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.2 }}
-            className="mb-3 md:mb-4 font-mono text-[9px] md:text-[10px] uppercase tracking-[0.4em] md:tracking-[0.5em] text-orange-500"
-          >
-            ◈ Software Engineer &amp; ML Researcher
-          </motion.div>
-
-          {/* NAME */}
-          <div className="relative">
-            {nameRevealed && (
-              <>
-                <div aria-hidden className="name-glitch-1 absolute inset-0 select-none"
-                  style={{ fontFamily: 'Syne, sans-serif', fontWeight: 800, fontSize: nameFontSize, lineHeight: 0.92, letterSpacing: '-0.01em', color: '#FF6B00', opacity: 0.6 }}>
-                  {nameLines.map((l, i) => <div key={i}>{l}</div>)}
-                </div>
-                <div aria-hidden className="name-glitch-2 absolute inset-0 select-none"
-                  style={{ fontFamily: 'Syne, sans-serif', fontWeight: 800, fontSize: nameFontSize, lineHeight: 0.92, letterSpacing: '-0.01em', color: '#0D0D0D', opacity: 0.35 }}>
-                  {nameLines.map((l, i) => <div key={i}>{l}</div>)}
-                </div>
-              </>
-            )}
-            <div style={{ fontFamily: 'Syne, sans-serif', fontWeight: 800, fontSize: nameFontSize, lineHeight: 0.92, letterSpacing: '-0.01em', color: '#0D0D0D', position: 'relative', zIndex: 2 }}>
-              {nameLines.map((l, i) => (
-                <div key={i} style={{ display: 'block' }}>
-                  {i === 0 ? (
-                    <span>
-                      {l.split('').map((ch, ci) => (
-                        <motion.span key={ci} initial={{ opacity: 0 }} animate={{ opacity: 1 }}
-                          transition={{ duration: 0.05, delay: ci * 0.04 + 0.5 }}
-                          style={{ color: ci === 6 ? '#FF6B00' : 'inherit' }}>
-                          {ch}
-                        </motion.span>
-                      ))}
-                    </span>
-                  ) : (
-                    <span style={{ color: '#FF6B00' }}>{l}</span>
-                  )}
-                </div>
-              ))}
+      <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-24 pb-16 flex flex-col lg:flex-row items-center gap-12 lg:gap-16">
+        <div className="flex-1 flex flex-col items-center lg:items-start text-center lg:text-left">
+          <div ref={badgeRef} className="hero-badge">
+            <div className="inline-flex items-center gap-2 rotate-[-1deg] border-[3px] border-black bg-white shadow-brutal px-4 py-2 font-bebas text-lg italic uppercase tracking-[0.3em]">
+              <span className="w-2 h-2 bg-red-600 rounded-full animate-ping" />
+              Backend Engineer
             </div>
           </div>
 
-          <motion.div initial={{ scaleX: 0, originX: 0 }} animate={{ scaleX: 1 }}
-            transition={{ duration: 0.8, delay: 1.6 }}
-            className="mt-3 md:mt-4 h-[3px] w-16 md:w-24 bg-orange-500" />
+          <h1 ref={titleRef} className="hero-title font-bebas italic text-7xl md:text-[11rem] font-black leading-[0.8] mt-6 select-none">
+            <span className="block text-black">NIRANJ</span>
+            <span className="block text-stroke">C N</span>
+          </h1>
 
-          <div className="mt-3 md:mt-5 font-body text-sm md:text-base tracking-wide text-ink/70">
-            {typed}
-            {typed.length < line.length && (
-              <span className="inline-block w-[2px] h-[13px] bg-orange-500 ml-1 animate-pulse" />
-            )}
+          <p ref={taglineRef} className="hero-tagline font-inter text-sm md:text-base text-black/70 max-w-xl mt-6">
+            {siteContent.about.paragraphs[0]}
+          </p>
+
+          <div className="flex items-center gap-2 mt-3 font-inter text-xs text-black/50">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" />
+              <circle cx="12" cy="10" r="3" />
+            </svg>
+            Based in {siteContent.about.ownerLocation}
           </div>
 
-          <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.7, delay: 2.6 }}
-            className="mt-7 md:mt-10 flex flex-wrap items-center gap-4 md:gap-6">
-            <button type="button" data-magnetic onClick={onEnterSystem}
-              className="group relative overflow-hidden bg-ink px-5 py-2.5 md:px-6 md:py-3 font-mono text-[10px] md:text-xs uppercase tracking-[0.3em] text-cream transition-all duration-300 hover:bg-orange-500">
-              <span className="relative z-10">{siteContent.hero.enterButton}</span>
-            </button>
-            <a data-magnetic href={siteContent.hero.resumeFile}
-              className="font-mono text-[10px] md:text-xs uppercase tracking-[0.3em] text-ink/70 orange-underline transition-colors duration-300 hover:text-orange-500"
-              download>
-              {siteContent.hero.resumeButton}
+          <div ref={actionsRef} className="hero-actions flex flex-wrap items-center gap-4 mt-8">
+            <a href="#about" className="brutal-btn group relative overflow-hidden">
+              <span className="relative z-10">About Me</span>
+              <span className="absolute inset-0 dot-grid opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
             </a>
-          </motion.div>
-
-          <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }}
-            transition={{ duration: 0.8, delay: 3.0 }}
-            className="mt-8 md:mt-12 flex items-center gap-6 md:gap-8">
-            {[
-              { value: '6', label: 'Products Shipped' },
-              { value: '30K+', label: 'Profiles Processed' },
-              { value: '98.52%', label: 'ML Accuracy' },
-            ].map(({ value, label }) => (
-              <div key={label}>
-                <div className="font-display text-xl md:text-2xl font-bold" style={{ color: '#FF6B00', fontFamily: 'Syne, sans-serif' }}>{value}</div>
-                <div className="font-mono text-[8px] md:text-[9px] uppercase tracking-[0.3em] text-ink/50">{label}</div>
-              </div>
-            ))}
-          </motion.div>
+            <a
+              href={siteContent.hero.resumeFile}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="brutal-btn-dark"
+            >
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
+                <polyline points="14 2 14 8 20 8" />
+                <line x1="16" y1="13" x2="8" y2="13" />
+                <line x1="16" y1="17" x2="8" y2="17" />
+              </svg>
+              View Resume
+            </a>
+            <div className="flex items-center gap-3">
+              <a href="https://github.com/niranjcn" target="_blank" rel="noopener noreferrer" className="text-black hover:text-black/60 transition-colors" aria-label="GitHub">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                  <path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z" />
+                </svg>
+              </a>
+              <a href="https://linkedin.com/in/niranjcn" target="_blank" rel="noopener noreferrer" className="text-black hover:text-black/60 transition-colors" aria-label="LinkedIn">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                  <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 01-2.063-2.065 2.064 2.064 0 112.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z" />
+                </svg>
+              </a>
+            </div>
+          </div>
         </div>
 
-        {/* RIGHT SIDE — Graph (hidden on mobile, visible md+) */}
-        <div className="hidden md:flex relative w-full md:w-[42%] flex-col justify-center pr-6 md:pr-12">
-          <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }}
-            transition={{ duration: 1.2, delay: 0.8 }}
-            ref={containerRef} className="h-[300px] md:h-[420px] w-full">
-            <canvas ref={canvasRef} className="h-full w-full" />
-          </motion.div>
-          <div className="mt-3 font-mono text-[10px] uppercase tracking-[0.3em] text-ink/40">
-            {siteContent.hero.graphCaption}
+        <div className="hero-image flex-shrink-0">
+          <div className="w-[280px] h-[320px] border-[3px] border-black shadow-brutal bg-stone-100 flex items-center justify-center">
+            <svg width="60" height="60" viewBox="0 0 24 24" fill="none" stroke="#a8a29e" strokeWidth="1" strokeLinecap="round" strokeLinejoin="round">
+              <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
+              <circle cx="12" cy="7" r="4" />
+            </svg>
           </div>
         </div>
       </div>
 
-      <Ticker />
+      <div ref={statsRef} className="hero-stats border-t-[3px] border-black bg-white">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
+            <div className="text-center">
+              <span className="block font-bebas text-4xl italic text-black">1+</span>
+              <span className="block font-inter text-[10px] font-black uppercase tracking-[0.2em] text-black/50 mt-1">Years</span>
+            </div>
+            <div className="text-center">
+              <span className="block font-bebas text-4xl italic text-black">3</span>
+              <span className="block font-inter text-[10px] font-black uppercase tracking-[0.2em] text-black/50 mt-1">Projects</span>
+            </div>
+            <div className="text-center">
+              <span className="block font-bebas text-4xl italic text-black">80%</span>
+              <span className="block font-inter text-[10px] font-black uppercase tracking-[0.2em] text-black/50 mt-1">Efficiency</span>
+            </div>
+            <div className="text-center">
+              <span className="block font-bebas text-4xl italic text-black">2</span>
+              <span className="block font-inter text-[10px] font-black uppercase tracking-[0.2em] text-black/50 mt-1">Awards</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <style>{`
+        .hero-badge,
+        .hero-title,
+        .hero-tagline,
+        .hero-actions,
+        .hero-image,
+        .hero-stats {
+          opacity: 0;
+          transition: opacity 0.7s ease, transform 0.7s ease;
+        }
+        .hero-badge { transform: translateY(24px); }
+        .hero-title { transform: translateY(24px); transition-delay: 0.15s; }
+        .hero-tagline { transform: translateY(24px); transition-delay: 0.3s; }
+        .hero-image { transform: translateY(24px) scale(0.95); transition-delay: 0.2s; }
+        .hero-actions { transform: translateY(24px); transition-delay: 0.5s; }
+        .hero-stats { transform: translateY(24px); transition-delay: 0.7s; }
+        .hero-badge.visible,
+        .hero-title.visible,
+        .hero-tagline.visible,
+        .hero-actions.visible,
+        .hero-image.visible,
+        .hero-stats.visible {
+          opacity: 1;
+          transform: translateY(0) scale(1);
+        }
+      `}</style>
     </section>
   )
 }

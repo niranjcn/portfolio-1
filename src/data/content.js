@@ -14,7 +14,7 @@ export const siteContent = {
     roleLine: 'Software Engineer · AI/ML Researcher · Cloud Architect · Kerala, India',
     enterButton: 'ENTER_SYSTEM →',
     resumeButton: 'READ_RESUME.PDF →',
-    resumeFile: '/swe_resume_ats.pdf',
+    resumeFile: '/NIRANJ_CN_Resume_0.pdf',
     graphCaption: '// live graph · 12 nodes · 18 edges',
     ticker:
       "BEST PAPER RAET'26 ··· 98.52% ML ACCURACY ··· 30,000+ PROFILES ··· KERALA VISION BROADBAND ··· STEP4ECO.UK ··· YIP GOVERNMENT OF KERALA ···",
@@ -57,7 +57,7 @@ export const siteContent = {
   },
   about: {
     label: 'THE ORIGIN STORY',
-    ownerPhoto: '/images/profile1.jpeg', // Place the portfolio owner's photo at /public/photo.jpg
+    ownerPhoto: '/images/profile1.png', // Place the portfolio owner's photo at /public/photo.jpg
     ownerName: 'Niranj C N',
     ownerTitle: 'Software Engineer · AI/ML Researcher · Cloud Architect',
     ownerLocation: 'Kannur, Kerala, India',
@@ -324,12 +324,117 @@ export const siteContent = {
         badges: ['KCCL — Regulatory Compliance'],
         links: {
           github: 'kccl.tv',
-          live: 'kccl.tv',
+          live: 'https://kccl.tv',
         },
         featured: false,
         illustration: 'documents',
         year: '2026',
         status: 'Delivered',
+      },
+      {
+        number: '07',
+        title: 'Engram — SM-2 DSA Tracker',
+        tagline: 'Spaced-repetition interview prep tracker with daily reviews and streaks.',
+        stackLine: 'React · FastAPI · MongoDB · Docker · Tailwind CSS',
+        stack: ['React', 'Vite', 'TailwindCSS', 'FastAPI', 'Python', 'MongoDB', 'JWT', 'SQLite', 'Docker', 'Docker Compose'],
+        description:
+          'Spaced-repetition DSA tracker applying the SM-2 algorithm (Anki-style) to LeetCode prep. React + Vite + Tailwind frontend with charts, FastAPI backend with JWT auth, staged mastery pipeline, Docker Compose one-command setup. Live on Netlify.',
+        longDescription: [
+          'Engram fixes the classic LeetCode grind problem — solving hundreds of problems and forgetting 80% within a week. Every attempt is rated (Solved Solo / Used Hint / Checked Code) and the server-side SM-2 algorithm schedules the next review at the exact moment before forgetting.',
+          'Problems move through four automatic stages — Learning, Reviewing, Mastered, Frozen — freezing permanently after 3 consecutive solo solves with 21+ day intervals. A daily dashboard shows what is due today, upcoming reviews, and streaks, with Recharts-powered progress analytics and a full problem journal.',
+          'Built with React 18 + Vite + TailwindCSS on the frontend and FastAPI + Motor/MongoDB with JWT auth on the backend. Fully containerized with Docker Compose (backend + frontend services) and deployed live on Netlify with MIT open-source license.',
+        ],
+        highlights: [
+          'Server-side SM-2 spaced-repetition scheduling, not just a timer',
+          'Automatic 4-stage mastery pipeline: Learning → Reviewing → Mastered → Frozen',
+          'Daily dashboard with due queue, streaks, and Recharts analytics',
+          'JWT auth with secure password hashing (Passlib/bcrypt)',
+          'One-command Docker Compose full-stack setup, live on Netlify',
+        ],
+        metrics: [
+          ['SM-2', 'scheduling algorithm'],
+          ['Live', 'netlify demo'],
+          ['Docker', 'compose setup'],
+        ],
+        badges: ['Live Demo — Netlify', 'MIT Licensed Open Source'],
+        links: {
+          github: 'https://github.com/niranjcn/Engram',
+          live: 'https://dsa-engram.netlify.app/',
+        },
+        featured: false,
+        illustration: 'grid',
+        year: '2026',
+        status: 'Live',
+      },
+      {
+        number: '08',
+        title: 'ContextOS — Private AI Memory Layer',
+        tagline: 'On-device RAG engine turning emails, docs and meetings into searchable memory.',
+        stackLine: 'Python · FastAPI · React · ChromaDB · Ollama · Docker',
+        stack: ['Python', 'FastAPI', 'React', 'Vite', 'ChromaDB', 'Kuzu', 'SQLite', 'Ollama', 'Docker', 'Docker Compose', 'GitHub Actions'],
+        description:
+          '100% on-device, privacy-first AI context engine. Ingests emails, documents, calendar and browser history into a local knowledge graph + vector store, queryable in natural language via a local LLM. FastAPI + React, Docker Compose with Ollama, 60+ tests.',
+        longDescription: [
+          'Every AI tool treats you like a stranger each session. ContextOS builds a persistent professional brain on your own machine — capturing emails (Gmail OAuth), local files, Chrome/Firefox history and meeting recordings (Whisper transcription), then answering in natural language with zero cloud dependency.',
+          'The core engine combines a Kuzu knowledge graph, ChromaDB vectors and SQLite metadata with spaCy NER ingestion and hybrid graph+vector retrieval over a local Ollama LLM. All ingested content is AES-256-GCM encrypted at rest — viable for GDPR/HIPAA/SOC 2 regulated environments.',
+          'Shipped with a Typer + Rich CLI (10+ commands), a React + Vite dashboard (query, graph browse, ingest, status), browser-extension capture, multi-stage Docker builds, one-command Compose deployment (API + Ollama + model-puller), CI/CD via GitHub Actions, and 60+ tests. Apache-2.0 open source.',
+        ],
+        highlights: [
+          'Fully functional end-to-end: storage → ingestion → retrieval → local LLM',
+          'Hybrid retrieval: Kuzu knowledge graph + ChromaDB vectors + SQLite metadata',
+          'AES-256-GCM encryption at rest, 100% on-device for regulated industries',
+          'One-command Docker Compose stack: API + Ollama + automatic model pull',
+          '60+ tests, Typer CLI, React dashboard, Apache-2.0 license',
+        ],
+        metrics: [
+          ['60+', 'tests passing'],
+          ['100%', 'on-device'],
+          ['AES-256', 'encryption at rest'],
+        ],
+        badges: ['Apache-2.0 Open Source'],
+        links: {
+          github: 'https://github.com/niranjcn/ContextOS',
+          live: '',
+        },
+        featured: false,
+        illustration: 'network',
+        year: '2026',
+        status: 'Open Source',
+      },
+      {
+        number: '09',
+        title: 'syswatchd — System Health Daemon',
+        tagline: 'Lightweight CPU/memory/disk monitoring daemon with SQLite history and CLI.',
+        stackLine: 'Python · psutil · SQLite · CLI',
+        stack: ['Python', 'psutil', 'SQLite', 'CLI', 'PowerShell', 'systemd', 'JSON Logging'],
+        description:
+          'Minimal zero-cloud system health monitoring daemon. Polls CPU, memory, disk and top processes on a configurable interval, persists samples and alerts in SQLite, rotates structured JSON logs, and ships a CLI for status, history and alert queries.',
+        longDescription: [
+          'Most monitoring tools are either heavy APM suites or cloud-dependent. syswatchd is a minimal daemon that runs on any Windows or Linux machine with no internet required — polling CPU, memory, disk and top-5 processes every 5 seconds.',
+          'Each cycle collects a snapshot, writes structured JSON logs (5 MB rotation, 3 backups) and a SQLite row, then checks per-metric 90% thresholds with cooldown anti-spam plus recovery events when metrics drop back below threshold. A PID file prevents duplicate instances.',
+          'A companion CLI queries live status, historical samples and alert timelines with real-time log tailing. Ships with a PowerShell supervisor and a systemd unit for production deployment as a service.',
+        ],
+        highlights: [
+          'Configurable polling daemon (default 5s) with graceful SIGINT/SIGTERM shutdown',
+          'SQLite-persisted samples and alerts with CLI history queries',
+          'Threshold alerts with cooldown plus automatic recovery events',
+          'Rotating structured JSON logs, PID-file single-instance guard',
+          'PowerShell supervisor + systemd unit for Windows/Linux service deployment',
+        ],
+        metrics: [
+          ['5s', 'poll interval'],
+          ['90%', 'default thresholds'],
+          ['SQLite', 'local history'],
+        ],
+        badges: ['Open Source Systems Tool'],
+        links: {
+          github: 'https://github.com/niranjcn/syswatchd',
+          live: '',
+        },
+        featured: false,
+        illustration: 'camera',
+        year: '2026',
+        status: 'Open Source',
       },
     ],
   },
@@ -441,6 +546,28 @@ export const siteContent = {
         highlight: true,
       },
       {
+        id: 'fabric',
+        icon: '📜',
+        title: 'Microsoft Certified: Fabric Data Engineer Associate',
+        org: 'Microsoft · Exam DP-700',
+        year: '2026',
+        description:
+          'Certified data engineering on Microsoft Fabric — lakehouses, warehouses, Spark notebooks and medallion pipelines built for production analytics. Independently verifiable credential.',
+        tags: ['Certification', 'Data Engineering', 'Microsoft'],
+        highlight: true,
+      },
+      {
+        id: 'leetcode',
+        icon: '🧩',
+        title: '250+ LeetCode Problems Solved',
+        org: 'LeetCode · @niranjcn',
+        year: '2026',
+        description:
+          'Consistent competitive problem solving in Python across arrays, graphs and dynamic programming — 250+ problems tracked publicly, feeding the SM-2 spaced-repetition system behind Engram.',
+        tags: ['DSA', 'Python', 'Problem Solving'],
+        highlight: false,
+      },
+      {
         id: 'yip',
         icon: '🎯',
         title: 'Young Innovators Program (YIP)',
@@ -487,11 +614,11 @@ export const siteContent = {
       {
         id: 'cgpa',
         icon: '🎓',
-        title: 'B.Tech CSE — CGPA 8.0',
+        title: 'B.Tech CSE — CGPA 8.07',
         org: 'St. Thomas College of Engineering & Technology',
         year: '2026',
         description:
-          'Graduated with B.Tech in Computer Science & Engineering with a CGPA of 8.0/10, while simultaneously delivering 6 production projects, an internship, leading a tech club, and authoring two conference papers.',
+          'Graduated with B.Tech in Computer Science & Engineering with a CGPA of 8.07/10, while simultaneously delivering 6 production projects, an internship, leading a tech club, and authoring two conference papers.',
         tags: ['Education', 'Academic', 'Graduate'],
         highlight: false,
       },
@@ -547,6 +674,7 @@ export const siteContent = {
     socials: [
       { label: 'GITHUB', href: 'https://github.com/niranjcn' },
       { label: 'LINKEDIN', href: 'https://linkedin.com/in/niranjcn' },
+      { label: 'LEETCODE', href: 'https://leetcode.com/u/niranjcn/' },
       { label: 'EMAIL', href: 'mailto:niranjcn000@gmail.com' },
     ],
     footer: 'Built with precision by Niranj C N · 2026 · Kannur, Kerala',
@@ -579,7 +707,7 @@ export const siteContent = {
     github: 'github.com/niranjcn',
     location: 'Kannur, Kerala, India',
     education:
-      'St. Thomas College of Engineering and Technology, Mattanur, Kerala · B.Tech in Computer Science & Engineering · CGPA: 8.00/10 · Sep 2022 – Apr 2026',
+      'St. Thomas College of Engineering and Technology, Mattanur, Kerala · B.Tech in Computer Science & Engineering · CGPA: 8.07/10 · Sep 2022 – Apr 2026',
     achievements: [
       "★ Best Paper Award — TRACIENT, RAET'26 National Conference",
       '★ Led 15+ member engineering team, Vblaze Tech Club (delivered IGNITE + XTASY fest websites serving 500+ participants)',

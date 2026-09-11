@@ -1,0 +1,6 @@
+# Netlify SPA fallback — lets /projects/07, /certifications, etc. load directly
+/*  /index.html  200
+
+# Optional: force the old Netlify subdomain onto your primary .me domain.
+# Replace both hosts, then uncomment:
+# https://niranjcn.netlify.app/*  https://www.niranj.cn/:splat  301!
